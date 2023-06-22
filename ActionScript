@@ -1,0 +1,209 @@
+the actionscript used
+
+
+onClipEvent (load) {
+	YInt = 0;	//Y Intercept - used for Y axis line
+	XInt = 0;	//X Intercept - used for X axis line
+	// These values create the standard view for the graph upon start up
+	_root.NegX = -10;
+	_root.PosX = 10;
+	_root.NegY = -10;
+	_root.PosY = 10;
+	NegX = -10;
+	PosX = 10;
+	NegY = -10;
+	PosY = 10;
+	//sets the test point's origin
+	TX = 0;
+	TY = 0;
+	_root.A = 1;
+	_root.B = 0;
+	_root.C = 0;
+	_root.D = 0;
+	_root.E = 0;
+	_root.F = 0;
+	_root.G = 0;
+	_root.AU = 1
+	_root.BU = 1
+	_root.CU = 1
+	_root.DU = 2
+	_root.EU = 2
+	_root.FU = 3
+	_root.GU = 5
+	_root.AL = -1
+	_root.BL = -1
+	_root.CL = -1
+	_root.DL = -2
+	_root.EL = -2
+	_root.FL = -3
+	_root.GL = -5
+	_root.AV = 0
+	_root.BV = 0
+	_root.CV = 0
+	_root.DV = 0
+	_root.EV = 0
+	_root.FV = 0
+	_root.GV = 0
+	Help = 0
+	
+}
+onClipEvent (enterFrame) {
+	// First thing it needs to do is clear the lines drawn
+	_root.clear();
+	// Assigning the A B C D values
+	A = Math.round(_root.AL)+((_root.AU-_root.AL)*_root.AS.MeMe)
+	B = Math.round(_root.BL)+((_root.BU-_root.BL)*_root.BS.MeMe)
+	C = Math.round(_root.CL)+((_root.CU-_root.CL)*_root.CS.MeMe)
+	D = Math.round(_root.DL)+((_root.DU-_root.DL)*_root.DS.MeMe)
+	E = Math.round(_root.EL)+((_root.EU-_root.EL)*_root.ES.MeMe)
+	F = Math.round(_root.FL)+((_root.FU-_root.FL)*_root.FS.MeMe)
+	G = Math.round(_root.GL)+((_root.GU-_root.GL)*_root.GS.MeMe);	// odd phenomena with G happening
+	_root.text2 = G
+	
+	//Assigning displayed values
+	_root.AV = Math.round(_root.AL)+((_root.AU-_root.AL)*_root.AS.MeMe)
+	_root.BV = Math.round(_root.BL)+((_root.BU-_root.BL)*_root.BS.MeMe)
+	_root.CV = Math.round(_root.CL)+((_root.CU-_root.CL)*_root.CS.MeMe)
+	_root.DV = Math.round(_root.DL)+((_root.DU-_root.DL)*_root.DS.MeMe)
+	_root.EV = Math.round(_root.EL)+((_root.EU-_root.EL)*_root.ES.MeMe)
+	_root.FV = Math.round(_root.FL)+((_root.FU-_root.FL)*_root.FS.MeMe)
+	_root.GV = Math.round(_root.GL)+((_root.GU-_root.GL)*_root.GS.MeMe)
+	
+	//Assigning the viewing window constantly - looks sexy
+	//Have to check IF NAN - isNan() - cuz flash is weak
+	if (isNaN(PosX) == true) {
+		PosX = 0;
+	}
+	if (isNaN(NegX) == true) {
+		NegX = 0;
+	}
+	if (isNaN(PosY) == true) {
+		PosY = 0;
+	}
+	if (isNaN(NegY) == true) {
+		NegY = 0;
+	}
+	NegX = NegX-(NegX-_root.NegX)/3;
+	PosX = PosX-(PosX-_root.PosX)/3;
+	NegY = NegY-(NegY-_root.NegY)/3;
+	PosY = PosY-(PosY-_root.PosY)/3;
+	_root.tex = PosY;
+	
+	// this is a tracer that gives the XY values of the graph
+	// This moves the MovieClip to the mouse, and sends the values to the MC
+	_root.MouseTrace._x = _root._xmouse;
+	_root.MouseTrace._y = _root._ymouse;
+	_root.MouseTrace.MoX = Math.round(TraceX(_root._xmouse)*100)/100
+	_root.MouseTrace.MoY = Math.round(TraceY(_root._ymouse)*100)/100
+	
+	//this is the funtion that finds the points in the view window
+	function ViewX(X) {
+		NegX = NegX; //fucntion needs to see bounding box
+		PosX = PosX; //I will change this for smoothness
+		return ((400/(PosX-NegX))*(X-NegX))+50; // the +50 is because the view is offset 50 pix
+	}
+	function ViewY(Y) {
+		NegY = NegY;
+		PosY = PosY;
+		return ((300/(NegY-PosY))*(Y-PosY))+50;
+	}
+	
+	// These fucntions find the reverse of the viewing window, from pixels to x-value
+	// I had to create the equation in a TI-89 and sovle for X, and it did it.  I dont know how :OP
+	// ok yes I do, im just being lazy :P
+	function TraceX(X) {
+		return ((PosX-NegX)*X-50*(PosX-(9*NegX)))/400;
+	}
+	function TraceY(Y) {
+		return ((NegY-PosY)*Y-50*(NegY-(7*PosY)))/300;
+	}
+	
+	//This explicitly states the function
+	ROUND = 1000
+	if (_root.AV == 0) {
+		EQA = ""
+	}
+		else{
+		EQA = "("+Math.round(_root.AV*ROUND)/ROUND+")x^6+"
+	}
+	if (_root.BV == 0) {
+		EQB = ""
+	}
+		else{
+		EQB = "("+Math.round(_root.BV*ROUND)/ROUND+")x^5+"
+	}
+	if (_root.CV == 0) {
+		EQC = ""
+	}
+		else{
+		EQC = "("+Math.round(_root.CV*ROUND)/ROUND+")x^4+"
+	}
+	if (_root.DV == 0) {
+		EQD = ""
+	}
+		else{
+		EQD = "("+Math.round(_root.DV*ROUND)/ROUND+")x^3+"
+	}
+	if (_root.EV == 0) {
+		EQE = ""
+	}
+		else{
+		EQE = "("+Math.round(_root.EV*ROUND)/ROUND+")x^2+"
+	}
+	if (_root.FV == 0) {
+		EQF = ""
+	}
+		else{
+		EQF = "("+Math.round(_root.FV*ROUND)/ROUND+")x+"
+	}
+	if (_root.GV == 0) {
+		EQG = "0"
+	}
+		else{
+		EQG = "("+Math.round(_root.GV*ROUND)/ROUND+")"
+	}
+	WholeEQ = EQA+EQB+EQC+EQD+EQE+EQF+EQG
+	_root.EQ = "y(x) = "+WholeEQ
+	
+	
+	// This is where the points are moved and the lines are drawn
+	// This is also where the equation is calculated
+	for (num=0; num<=200; num++) {
+		CalcX = ((num)-(Math.abs(NegX)/(PosX-NegX))*200)*((PosX-NegX)/200);
+		CalcY = A*Math.pow(CalcX, 6)+B*Math.pow(CalcX, 5)+C*Math.pow(CalcX, 4)+D*Math.pow(CalcX, 3)+E*Math.pow(CalcX, 2)+F*Math.pow(CalcX, 1)+G; // odd phenomena with G happening  
+		
+		// MinusOne - because having this on the drawing of the lines looks REALLY bad
+		Xminusone = ((num-1)-(Math.abs(NegX)/(PosX-NegX))*200)*((PosX-NegX)/200);
+		Yminusone = A*Math.pow(Xminusone, 6)+B*Math.pow(Xminusone, 5)+C*Math.pow(Xminusone, 4)+D*Math.pow(Xminusone, 3)+E*Math.pow(Xminusone, 2)+F*Math.pow(Xminusone, 1)+G;
+		
+		// Because extreme values of Y cause the lines to loop around - I had to catch them and restrict here
+		DoItY = ViewY(CalcY);
+		DoItYMinus = ViewY(Yminusone);
+		if (DoItY>350) {
+			DoItY = 350;
+		}
+		if (DoItY<50) {
+			DoItY = 50;
+		}
+		if (DoItYMinus>350) {
+			DoItYMinus = 350;
+		}
+		if (DoItYMinus<50) {
+			DoItYMinus = 50;
+		}
+		_root.lineStyle(1, 0, 100);
+		_root.moveTo(ViewX(CalcX), DoItY);
+		_root.lineTo(ViewX(Xminusone), DoItYMinus);
+		
+	}
+		
+		
+	// Draws the X and Y intercepts
+	_root.lineStyle(1, 0, 100);
+	_root.moveTo(ViewX(XInt), 50);
+	_root.lineTo(ViewX(XInt), 350);
+	_root.lineStyle(1, 0, 100);
+	_root.moveTo(50, ViewY(YInt));
+	_root.lineTo(450, ViewY(YInt));
+	
+}
